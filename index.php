@@ -15,12 +15,7 @@ and open the template in the editor.
         src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
     </head>
     <body>
-        <?php
-        $operator = $_POST['opr'];
-        $firstNumber = $_POST['num'];
-        echo $firstNumber;
-        echo $operator;
-        ?>
+
         <section id="calculator_container">
             <div id="calculator_screen">
                 <h1 id="result"></h1>
@@ -53,7 +48,7 @@ and open the template in the editor.
             let opr = "";
             let secondNum = "";
             let oprClickedOnce = false;
-            $('#clear').on("click", function(e) {
+            $('#clear').on("click", function (e) {
                 firstNum = "";
                 opr = "";
                 secondNum = "";
@@ -62,7 +57,6 @@ and open the template in the editor.
             });
             $('#calculator').submit((e) => {
                 e.preventDefault();
-                let result = document.getElementById("result").innerText;
                 if (e["originalEvent"]["submitter"]["name"] == "num" && !oprClickedOnce) {
                     /* *********************************************
                      * Displays first number on screen
@@ -128,12 +122,17 @@ and open the template in the editor.
                     });
 
                 }
+
+                function clearScreen() {
+                    document.querySelector("#result").textContent = "";
+                }
+                
                 function display(value) {
                     document.querySelector("#result").textContent += value;
 
 
                 }
-               
+
                 function calculate() {
                     return new Promise((resolve) => {
                         $.ajax({
