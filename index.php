@@ -47,39 +47,59 @@ and open the template in the editor.
             </form>
 
         </section>
-        <button>Clear</button>
+        <button id="clear">Clear</button>
         <script>
             let firstNum = "";
             let opr = "";
             let secondNum = "";
             let oprClickedOnce = false;
+            $('#clear').on("click", function(e) {
+                firstNum = "";
+                opr = "";
+                secondNum = "";
+                oprClickedOnce = false;
+                document.querySelector("#result").textContent = "";
+            });
             $('#calculator').submit((e) => {
                 e.preventDefault();
                 let result = document.getElementById("result").innerText;
                 if (e["originalEvent"]["submitter"]["name"] == "num" && !oprClickedOnce) {
+                    /* *********************************************
+                     * Displays first number on screen
+                     * *********************************************
+                     * Also checks if user click on operator button
+                     * *********************************************/
                     firstNum += e["originalEvent"]["submitter"]["value"];
                     document.querySelector("#result").textContent = "";
                     display(firstNum);
+
+
                 } else if (e["originalEvent"]["submitter"]["name"] == "num" && oprClickedOnce) {
+                    /* **********************************************************
+                     * Displays second number on screen after operator is pressed
+                     * **********************************************************/
                     secondNum += e["originalEvent"]["submitter"]["value"];
-                    display(secondNum);
+                    let printNum = e["originalEvent"]["submitter"]["value"];
+                    display(printNum);
+//                    
+
 
                 } else if (e["originalEvent"]["submitter"]["name"] == "opr" && !oprClickedOnce) {
+                    /* *************************************************************
+                     *  When user entered first number and click on Operation button
+                     * *************************************************************/
                     opr = e["originalEvent"]["submitter"]["value"];
                     display(opr);
                     oprClickedOnce = true;
 
                 } else if (e["originalEvent"]["submitter"]["name"] == "opr" && oprClickedOnce) {
-                    opr = e["originalEvent"]["submitter"]["value"];
-
                     calculate().then((resolve) => {
                         firstNum = resolve;
-                        console.log(resolve);
+                        opr = e["originalEvent"]["submitter"]["value"];
                         secondNum = "";
                         clearScreen();
                         display(firstNum);
                         display(opr);
-//                        oprClickedOnce = false;
 
                     });
 
@@ -95,31 +115,25 @@ and open the template in the editor.
                     display(firstNum);
                 } else if (e["originalEvent"]["submitter"]["name"] == "dot" && oprClickedOnce) {
                     secondNum += e["originalEvent"]["submitter"]["value"];
-//                    document.querySelector("#result").textContent = "";
 
                     display(secondNum);
                 } else if (e["originalEvent"]["submitter"]["name"] == "equal" && opr != "") {
                     calculate().then((resolve) => {
                         firstNum = resolve;
-                        console.log(firstNum);
                         secondNum = "";
                         clearScreen();
                         display(firstNum);
                         opr = e["originalEvent"]["submitter"]["value"];
                         oprClickedOnce = false;
-
-
                     });
 
                 }
                 function display(value) {
                     document.querySelector("#result").textContent += value;
-//                    console.log(document.querySelector("#result").textContent);
+
+
                 }
-                function clearScreen() {
-                    document.querySelector("#result").textContent = "";
-                }
-//                alert(firstNum + "." + opr + "." + secondNum);
+               
                 function calculate() {
                     return new Promise((resolve) => {
                         $.ajax({
